@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include <libstr.h>
 #include <arch/i686/io.h>
+#include <arch/i686/idt.h>
 
 // mapa de teclas del teclado
 unsigned char kbdus[128] =
@@ -62,7 +63,7 @@ char kbd_interrupt(unsigned char *data)
 }
 
 // Función para leer una línea completa del teclado
-void kbd_init(char *buffer, size_t buffer_size)
+void kbd_interrupt_handler(char *buffer, size_t buffer_size)
 {
     unsigned char keycode;
     keyboard_buffer_pos = 0;
@@ -92,4 +93,9 @@ void kbd_init(char *buffer, size_t buffer_size)
             return;
         }
     }
+}
+
+void kbd_init(char *buffer, size_t buffer_size)
+{
+  kbd_interrupt_handler(buffer, buffer_size);
 }
